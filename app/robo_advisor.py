@@ -18,47 +18,55 @@ def to_usd(my_price):
     """
     return f"${my_price:,.2f}"
 
+run_time_date = datetime.datetime.now()
+
+
 #user_ticker = input("Please enter the stock ticker that you want to analyze: ")
-print(type(user_ticker))
-ALPHAVANTAGE_API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default = "IBM")
+#print(len(user_ticker)
+#ALPHAVANTAGE_API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default = "IBM")
 
-request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+user_ticker+"&apikey="+ALPHAVANTAGE_API_KEY
+#request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+user_ticker+"&apikey="+ALPHAVANTAGE_API_KEY
 
-response = requests.get(request_url)
+#response = requests.get(request_url)
 
-parsed_response = json.loads(response.text) 
+#parsed_response = json.loads(response.text) 
 
 while True:
     user_ticker = input("Please input the stock ticker you would like to analyze: ")
-    ALPHAVANTAGE_API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default = "IBM")
-    request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+user_ticker+"&apikey="+ALPHAVANTAGE_API_KEY
-    response = requests.get(request_url)
+    #ALPHAVANTAGE_API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default = "IBM")
+    #request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+user_ticker+"&apikey="+ALPHAVANTAGE_API_KEY
+    #response = requests.get(request_url)
 
-    ## first part of input validation is to make sure that it is not a numeric input since no stock tickers contain numbers, even though input always returns a string 
+    ## first part of input validation is to make sure that it is not a numeric input since no stock tickers contain numbers, even though input always returns a string OR less than 1 character/more than 5 characters
 
-    if user_ticker.isdigit():
+    if user_ticker.isnumeric() or len(user_ticker) < 1 or len(user_ticker) > 5:
         print("OOPS, this is an invalid input. Make sure to input a valid stock ticker.")
+        exit
+        # no HTTP request here
     else: 
         ALPHAVANTAGE_API_KEY = os.getenv("ALPHAVANTAGE_API_KEY", default = "IBM")
         request_url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+user_ticker+"&apikey="+ALPHAVANTAGE_API_KEY
         response = requests.get(request_url)
         parsed_response = json.loads(response.text) 
-    
-    # second part of input validation is making sure 
-    if list(parsed_response.keys())[0] == "Error Message":
-        print("OOPS, please enter a valid ticker to analyze: ")
-        exit
-    elif list(parsed_response.keys())[0] == "Meta Data":
-        latest_day = parsed_response["Meta Data"]["3. Last Refreshed"]
-        tsd = parsed_response["Time Series (Daily)"]
-        all_dates = list(tsd.keys())
-        sorted_dates = sorted(all_dates, reverse=True)
-        matching_date = sorted_dates[0] #since first item in the list is the most recent date
-        latest_close_price = tsd[matching_date]["4. close"]  
-        break
+
+    # second part of input validation is making sure - will be nested inside the else statement 
+
+        if list(parsed_response.keys())[0] == "Error Message":
+            print("OOPS, the stock ticker you input does not exist. Please try again! ")
+            exit
+        else:
+            #latest_day = parsed_response["Meta Data"]["3. Last Refreshed"]
+            #tsd = parsed_response["Time Series (Daily)"]
+            #all_dates = list(tsd.keys())
+            #sorted_dates = sorted(all_dates, reverse=True)
+            #matching_date = sorted_dates[0] #since first item in the list is the most recent date
+            #latest_close_price = tsd[matching_date]["4. close"]  
+            analysis_results(user_ticker)
+            break
 
 
-run_time_date = datetime.datetime.now()
+
+
 
 
 print("-------------------------")
@@ -113,9 +121,8 @@ print("-------------------------")
 #print("RECENT LOW: $99,000.00")
 #print("-------------------------")
 #print("RECOMMENDATION: BUY!")
-#print("RECOMMENDATION REASON: TODO")
+#print("RECOMMENDATION REASON: T")
 #print("-------------------------")
 #print("HAPPY INVESTING!")
 #print("-------------------------")
 
-print("Run at: "+run_time_date.strftime("%I:%M %p")+" on",run_time_date.strftime("%B %d")+", "+run_time_date.strftime("%Y"))
