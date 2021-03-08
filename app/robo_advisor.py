@@ -5,6 +5,8 @@ import os
 import datetime 
 import json
 import csv 
+from pandas import read_csv
+import seaborn as sns 
 
 
 # this function is used to convert from normal number to a currency (as to say)
@@ -83,12 +85,15 @@ while True:
             analytics = analysis(parsed_response)
             # initializing a string in order to print it later on (for the recommendation)
             recommendation = ""
+            recommendation_reason = ""
             risk_acceptable = input("Please enter a valid risk threshold for you investment where the value must be between 1 and 10: ")
             percentage_risk = float(risk_acceptable)/20
             if (float(analytics["Latest Price"])-float(analytics["Recent Low"]))/float(analytics["Recent Low"]) > percentage_risk:
-                recommendation+= "NO BUY. This stock's risk is greater than your risk threshold."
+                recommendation+= "NO BUY!"
+                recommendation_reason+= "This stock's risk is greater than your risk threshold."
             else:
-                recommendation+= "BUY. This stock's risk lies within your desired risk threshold."
+                recommendation+= "BUY!"
+                recommendation_reason+= "This stock's risk lies within your desired risk threshold."
             break
         
     else: 
@@ -108,15 +113,17 @@ print("LATEST CLOSE: ",to_usd(float(analytics["Latest Price"])))
 print("RECENT HIGH: ",to_usd(analytics["Recent High"]))
 print("RECENT LOW: ",to_usd(analytics["Recent Low"]))
 print("-------------------------")
-print("RECOMMENDATION: BUY!")
-print("RECOMMENDATION REASON: TODO")
+print("RECOMMENDATION:",recommendation)
+print("RECOMMENDATION REASON:",recommendation_reason)
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
 
 
-
-
+data_vis_in = input("Would you like to view a line graph that plots the prices of your desired stock over time? [y/n]")
+if data_vis_in == "y":
+    prices_df = read_csv("data/prices.csv")
+    sns.lineplot(data=prices_df, x="timestamp", y="close")
 
 
 
