@@ -81,7 +81,14 @@ while True:
             exit
         else:
             analytics = analysis(parsed_response)
-
+            # initializing a string in order to print it later on (for the recommendation)
+            recommendation = ""
+            risk_acceptable = input("Please enter a valid risk threshold for you investment where the value must be between 1 and 10: ")
+            percentage_risk = float(risk_acceptable)/20
+            if (float(analytics["Latest Price"])-float(analytics["Recent Low"]))/float(analytics["Recent Low"]) > percentage_risk:
+                recommendation+= "NO BUY. This stock's risk is greater than your risk threshold."
+            else:
+                recommendation+= "BUY. This stock's risk lies within your desired risk threshold."
             break
         
     else: 
@@ -106,6 +113,13 @@ print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+
+
+
+
+
+
+
 
 
 added_bonus = input("Would you like to see an extra analysis for your desired ticker? [y/n]")
