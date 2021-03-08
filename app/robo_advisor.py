@@ -4,7 +4,7 @@ import requests
 import os
 import datetime 
 import json
-
+import csv 
 
 
 # this function is used to convert from normal number to a currency (as to say)
@@ -47,7 +47,23 @@ def analysis(prices_dict):
                 "Recent High": recent_high,
                 "Recent Low": recent_low,
                 "Latest day": latest_day}
+    csv_file_path = os.path.join(os.path.dirname(__file__), "..", "data", "prices.csv")
 
+    csv_headers = ["timestamp", "open", "high", "low", "close", "volume"]
+
+    with open(csv_file_path, "w") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=csv_headers)
+        writer.writeheader()
+        for date in all_dates:
+            daily_prices = tsd[date]
+            writer.writerow({
+                "timestamp": date,
+                "open": daily_prices["1. open"],
+                "high": daily_prices["2. high"],
+                "low": daily_prices["3. low"],
+                "close": daily_prices["4. close"],
+                "volume": daily_prices["5. volume"]
+            })
     return results
 
 while True:
@@ -81,6 +97,7 @@ while True:
             exit
         else:
             analytics = analysis(parsed_response)
+            
             break
         
     else: 
@@ -92,7 +109,7 @@ while True:
 
 
 print("-------------------------")
-print("SELECTED TICKER: "+user_ticker)
+print("SELECTED TICKER: "+user_ticker.upper())
 print("-------------------------")
 print("REQUESTING STOCK MARKET DATA...")
 print("REQUEST AT: "+run_time_date.strftime("%I:%M %p")+" on",run_time_date.strftime("%B %d")+", "+run_time_date.strftime("%Y"))
@@ -107,6 +124,11 @@ print("RECOMMENDATION REASON: TODO")
 print("-------------------------")
 print("HAPPY INVESTING!")
 print("-------------------------")
+
+
+
+# writing onto a cvs file 
+
 
 #print("Run at: "+run_time_date.strftime("%I:%M %p")+" on",run_time_date.strftime("%B %d")+", "+run_time_date.strftime("%Y"))
 
