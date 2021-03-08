@@ -106,8 +106,6 @@ while True:
     # second part of input validation is making sure - will be nested inside the else statement 
 
         
-
-
 print("-------------------------")
 print("SELECTED TICKER: "+user_ticker.upper())
 print("-------------------------")
