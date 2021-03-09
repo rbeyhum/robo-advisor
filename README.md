@@ -39,3 +39,11 @@ Once evrything is set up, the user can now run the code from the command-line by
 ```sh
 python app/robo_advisor.py
 ```
+
+## Fetching Data from API 
+
+As mentioned, the API used here is ALPHAVANTAGE. In order to use this API, the user needs to create an account which then gives them an API key to use later on. This key is stored in the *.env* file for security reasons and therefore the user must store their own API value in a variable called ALPHAVANTAGE_API_KEY. After that, the user is able to use the API and gather the necessary data. 
+
+### Further Explorations
+
+The basic requirement and the further explorations here follow the same parsed version. However, the further exploration data requests more data than that of the basic requirement. The chart generated is a result of the basic requirement data that only gives 100 data points. In order to calculate the 52 week high and low (assuming the average market days a year is 252), more data was needed and therefore another url was used. 
