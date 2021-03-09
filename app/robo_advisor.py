@@ -10,6 +10,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd 
 
+
 # this function is used to convert from normal number to a currency (as to say)
 
 def to_usd(my_price):
@@ -155,8 +156,8 @@ if added_bonus == "y":
     high_prices_new = []
     low_prices_new = []
     
-    
-    #while num_days < 252:
+
+
     for datenew in sorted_dates_new[0:252]: #this is a rough estimate for 52 weeks
         high_price_new = tsd_new[datenew]["2. high"]
         low_price_new = tsd_new[datenew]["3. low"]
